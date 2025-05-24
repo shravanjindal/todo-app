@@ -15,6 +15,30 @@ The goal of this project is to **explore and implement** a full-stack applicatio
 
 ---
 
+## 🖼️ Screenshots
+
+Here’s a preview of how the app works:
+
+| Todos Listing                           | Add Todo                       | Select Week                          |
+| --------------------------------------- | ------------------------------ | ------------------------------------ |
+| ![todoListing](assets/todosListing.png) | ![addTodo](assets/addTodo.png) | ![selectWeek](assets/selectWeek.png) |
+
+| Edit Todo                        | Update Status                            |
+| -------------------------------- | ---------------------------------------- |
+| ![editTodo](assets/editTodo.png) | ![updateStatus](assets/updateStatus.png) |
+
+---
+
+## 📌 Features
+
+* Add and edit todos
+* Assign week to each task
+* Track completion status
+* GraphQL-powered API
+* Fully styled and responsive mobile UI
+
+---
+
 ## 🚀 How to Run the Project
 
 ### 🔧 Prerequisites
@@ -66,29 +90,5 @@ npm start
 ```
 /server/prisma/schema.prisma
 ```
-
----
-
-## 🖼️ Screenshots
-
-Here’s a preview of how the app works:
-
-| Todos Listing                           | Add Todo                       | Select Week                          |
-| --------------------------------------- | ------------------------------ | ------------------------------------ |
-| ![todoListing](assets/todosListing.png) | ![addTodo](assets/addTodo.png) | ![selectWeek](assets/selectWeek.png) |
-
-| Edit Todo                        | Update Status                            |
-| -------------------------------- | ---------------------------------------- |
-| ![editTodo](assets/editTodo.png) | ![updateStatus](assets/updateStatus.png) |
-
----
-
-## 📌 Features
-
-* Add and edit todos
-* Assign week to each task
-* Track completion status
-* GraphQL-powered API
-* Fully styled and responsive mobile UI
 
 ---
