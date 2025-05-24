@@ -22,7 +22,7 @@ data : {
     descrption?: string;
     week?: string;
     completed?: boolean;
-} | {};
+};
   onClose?: () => void;
   refetch?: () => void;
 }

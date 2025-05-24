@@ -53,12 +53,14 @@ const DialogBox = ({onClose, refetch} : DialogBoxProps) => {
       <Text style={styles.title}>Add Todo</Text>
       <TextInput 
       placeholder="Enter Title"
+      placeholderTextColor= '#d4d4d4'
       value={title}
       onChangeText={setTitle}
       style={styles.titleInput}
       />
       <TextInput 
         placeholder="Enter Description"
+        placeholderTextColor= '#d4d4d4'
         value={description}
         onChangeText={setDescription}
         style={styles.descriptionInput}

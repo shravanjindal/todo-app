@@ -35,6 +35,7 @@ const Header = ({ handleAddTodo }: HeaderProps) => {
 const styles = StyleSheet.create({
   outerContainer : {
     backgroundColor: '#1e1e1e',
+    paddingTop: 50,
     paddingBottom: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
