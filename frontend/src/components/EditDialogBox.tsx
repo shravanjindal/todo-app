@@ -1,13 +1,64 @@
-import React, { useState } from 'react'
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import YearWeekPicker from './DatePicker'
-const DialogBox = () => {
-    const [title, setTitle] = useState('')
-    const [description, setDescription] = useState('')
+import { gql, useMutation } from '@apollo/client';
+import React, { useState } from 'react';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import YearWeekPicker from './DatePicker';
+
+// Define the mutation
+const UPDATE_TODO = gql`
+    mutation UpdateTodo($id: Int!, $title: String!, $descrption: String, $week: String) {
+        updateTodo(id: $id, title: $title, descrption: $descrption, week: $week) {
+        id
+        title
+        descrption
+        week
+        }
+    }
+`
+
+interface EditDialogBoxProps {
+data : {
+    id: Int16Array;
+    title : string;
+    descrption?: string;
+    week?: string;
+    completed?: boolean;
+} | {};
+  onClose?: () => void;
+  refetch?: () => void;
+}
+const EditDialogBox = ({data,onClose, refetch} : EditDialogBoxProps) => {
+    const [title, setTitle] = useState(data.title || '')
+    const [description, setDescription] = useState(data.descrption || '')
+    const [week, setweek] = useState(data.week || '')
     const [toggleWeekPicker, setToggleWeekPicker] = useState(false)
+    const [updateTodo, { loading, error }] = useMutation(UPDATE_TODO);
+    const handleSubmit = () => {
+      if (!title) return alert('Title is required');
+  
+      updateTodo({
+        variables: {
+          id: data.id,
+          title,
+          descrption: description,
+          week
+        },
+      })
+      .then(() => {
+        setTitle('');
+        setDescription('');
+      })
+      .catch(err => {
+        console.error(err);
+        alert('Something went wrong');
+      })
+      .finally(() => {
+        onClose && onClose();
+        refetch && refetch();
+      });
+    };
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Add Todo</Text>
+      <Text style={styles.title}>Edit Todo</Text>
       <TextInput 
       placeholder="Enter Title"
       value={title}
@@ -24,16 +75,18 @@ const DialogBox = () => {
         textAlignVertical="top" // ensures text starts at the top
         />
         <TouchableOpacity onPress={() => {setToggleWeekPicker(!toggleWeekPicker)}} style={styles.button}>
-            <Text style={styles.buttonText}>Pick Week</Text>
+            <Text style={styles.buttonText}>{week ? week : "Set Week"}</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log('Submit')} style={styles.button}>
-            <Text style={styles.buttonText}>Add</Text>
-        </TouchableOpacity>
+        <TouchableOpacity onPress={handleSubmit} style={styles.button}>
+        <Text style={styles.buttonText}>{loading ? 'Updating...' : 'Update'}</Text>
+      </TouchableOpacity>
+      {error && <Text style={{ color: 'red' }}>Error: {error.message}</Text>}
+
         {toggleWeekPicker && (
           <YearWeekPicker 
             onClose={() => setToggleWeekPicker(false)}
             onSelect={(year, week) => {
-              console.log(`Selected Year: ${year}, Week: ${week}`);
+                setweek(`${year}-W${week}`);
               setToggleWeekPicker(false);
             }}
           />
@@ -96,4 +149,4 @@ const styles = StyleSheet.create ({
         marginTop: 10,
     }
 })
-export default DialogBox
+export default EditDialogBox

@@ -1,26 +1,76 @@
+import { gql, useMutation } from '@apollo/client';
 import { Feather } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-
-export interface TodoCardProps {
-  data : {
-    title:string;
-    description:string;
-    date:string;
-    checked?: boolean;
+const DELETE_TODO = gql`
+  mutation DeleteTodo($id: Int!) {
+    deleteTodo(id: $id) {
+      id
+    }
   }
+`
+const UPDATE_TODO_STATUS = gql`
+  mutation UpdateTodoStatus($id: Int!, $completed: Boolean!) {
+    updateTodoStatus(id: $id, completed: $completed) {
+      id
+      completed
+    }
+  }
+`
+interface TodoData {
+  id: Int16Array;
+  title : string;
+  descrption?: string;
+  week?: string;
+  completed: boolean;
 }
-const TodoCard = ({data} :TodoCardProps) => {
-  const [checked, setChecked] = useState(data.checked || false);
-
-  const toggleCheckbox = () => {
-    setChecked(!checked);
-  };
-  const handleEdit = () => {
-    console.log('Edit button pressed');
+export interface TodoCardProps {
+  data : TodoData;
+  refetch?: () => void;
+  handleEdit: (todo : TodoData) => void;
+}
+const TodoCard = ({data,refetch, handleEdit} :TodoCardProps) => {
+  console.log('TodoCard data:', data);
+  const [checked, setChecked] = useState(data.completed || false);
+  const [deleteTodo, { loading, error }] = useMutation(DELETE_TODO)
+  const [updateTodoStatus] = useMutation(UPDATE_TODO_STATUS);
+  const handleTodoStatus = (todo: TodoData) => {
+    updateTodoStatus({
+      variables: {
+        id: todo.id,
+        completed: todo.completed,
+      },
+    })
   }
+  const toggleCheckbox = () => {
+    try{
+      data.completed = !checked;
+      setChecked(!checked);
+    } catch (error) {}
+    finally {
+      handleTodoStatus(data);
+    }
+  };
+  const [toggleEditDialogBox, setToggleEditDialogBox] = useState(false);
+
+  
+
   const handleDelete = () => {
-    console.log('Delete button pressed');
+    deleteTodo({
+      variables: {
+        id: data.id,
+      },
+    })
+    .then(() => {
+      console.log('Todo deleted successfully');
+    })
+    .catch(err => {
+      console.error('Error deleting todo:', err);
+      alert('Something went wrong while deleting the todo');
+    })
+    .finally(() => {
+      refetch && refetch();
+    });
   }
   return (
     <View 
@@ -35,7 +85,7 @@ const TodoCard = ({data} :TodoCardProps) => {
           style={styles.checkbox}
         />
       </TouchableOpacity>
-      <TouchableOpacity onPress={handleEdit}>
+      <TouchableOpacity onPress={() => handleEdit(data)}>
         {
           checked ? (
             <></>
@@ -50,10 +100,10 @@ const TodoCard = ({data} :TodoCardProps) => {
         style={styles.innerContainer}
         >
         <Text style={styles.title}>{data.title}</Text>
-        <Text style={styles.description}>{data.description}</Text>
+        <Text style={styles.description}>{data.descrption}</Text>
       </View>
       <View style={styles.rightContainer}>
-      <Text style={styles.time}>{data.date}</Text>
+      <Text style={styles.time}>{data.week}</Text>
       <TouchableOpacity onPress={handleDelete}>
           <Feather name="trash" style={styles.bin} />
        </TouchableOpacity>

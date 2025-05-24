@@ -1,5 +1,5 @@
 {
-  "name": "todo-app",
+  "name": "frontend",
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
@@ -11,13 +11,13 @@
     "lint": "expo lint"
   },
   "dependencies": {
+    "@apollo/client": "^3.13.8",
     "@expo/vector-icons": "^14.1.0",
-    "@react-native-community/checkbox": "^0.5.20",
-    "@react-native-community/datetimepicker": "^8.3.0",
     "@react-native-picker/picker": "^2.11.0",
     "@react-navigation/bottom-tabs": "^7.3.10",
     "@react-navigation/elements": "^2.3.8",
     "@react-navigation/native": "^7.1.6",
+    "date-fns": "^4.1.0",
     "expo": "~53.0.9",
     "expo-blur": "~14.1.4",
     "expo-constants": "~17.1.6",
@@ -38,7 +38,6 @@
     "react-native-reanimated": "~3.17.4",
     "react-native-safe-area-context": "5.4.0",
     "react-native-screens": "~4.10.0",
-    "react-native-vector-icons": "^10.2.0",
     "react-native-web": "~0.20.0",
     "react-native-webview": "13.13.5"
   },
