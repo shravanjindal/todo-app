@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import YearWeekPicker from './DatePicker'
 const DialogBox = () => {
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
-    const [date, setDate] = useState('')
+    const [toggleWeekPicker, setToggleWeekPicker] = useState(false)
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Add Todo</Text>
@@ -22,12 +23,21 @@ const DialogBox = () => {
         numberOfLines={4}
         textAlignVertical="top" // ensures text starts at the top
         />
-        <TouchableOpacity onPress={() => console.log('Date Picker Opened')} style={styles.button}>
-            <Text style={styles.buttonText}>Pick Due Date</Text>
+        <TouchableOpacity onPress={() => {setToggleWeekPicker(!toggleWeekPicker)}} style={styles.button}>
+            <Text style={styles.buttonText}>Pick Week</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => console.log('Submit')} style={styles.button}>
             <Text style={styles.buttonText}>Add</Text>
         </TouchableOpacity>
+        {toggleWeekPicker && (
+          <YearWeekPicker 
+            onClose={() => setToggleWeekPicker(false)}
+            onSelect={(year, week) => {
+              console.log(`Selected Year: ${year}, Week: ${week}`);
+              setToggleWeekPicker(false);
+            }}
+          />
+        )}
     </View>
   )
 }

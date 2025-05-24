@@ -2,8 +2,16 @@ import { Feather } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-const TodoCard = () => {
-  const [checked, setChecked] = useState(false);
+export interface TodoCardProps {
+  data : {
+    title:string;
+    description:string;
+    date:string;
+    checked?: boolean;
+  }
+}
+const TodoCard = ({data} :TodoCardProps) => {
+  const [checked, setChecked] = useState(data.checked || false);
 
   const toggleCheckbox = () => {
     setChecked(!checked);
@@ -41,13 +49,11 @@ const TodoCard = () => {
       <View 
         style={styles.innerContainer}
         >
-        <Text style={styles.title}>TodoCard</Text>
-        <Text style={styles.description}>
-          This is a description of the todo item. It can be long or short.
-        </Text>
+        <Text style={styles.title}>{data.title}</Text>
+        <Text style={styles.description}>{data.description}</Text>
       </View>
       <View style={styles.rightContainer}>
-      <Text style={styles.time}>2025-25</Text>
+      <Text style={styles.time}>{data.date}</Text>
       <TouchableOpacity onPress={handleDelete}>
           <Feather name="trash" style={styles.bin} />
        </TouchableOpacity>
